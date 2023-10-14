@@ -1,17 +1,16 @@
 # syntax=docker/dockerfile:1.2
 
 # Inspired by https://kerkour.com/rust-small-docker-image
-ARG ALPINE_VERSION="3.15"
-ARG RUST_VERSION="1.62.1"
+ARG RUST_VERSION="1.73.0"
 
 FROM rust:${RUST_VERSION} AS builder
 
 RUN apt-get update -y && \
     apt-get upgrade -y && \
     apt-get install -y --no-install-recommends \
-        libffi-dev=3.3-6 \
-        libssl-dev=1.1.1n-0+deb11u5 \
-        cmake=3.18.4-2+deb11u1
+        libffi-dev=3.4.4-1 \
+        libssl-dev=3.0.11-1~deb12u1 \
+        cmake=3.25.1-1
 RUN update-ca-certificates
 
 # Create appuser
@@ -30,14 +29,12 @@ RUN adduser \
 WORKDIR /home
 
 # copy listener source code
-ARG BUNDLE
-ARG STACK
-COPY ./artifact/${BUNDLE}/${STACK} .
+COPY . .
 
 RUN cargo build --release
 
 # hadolint ignore=DL3006
-FROM gcr.io/distroless/cc
+FROM gcr.io/distroless/cc-debian12
 
 # Import from builder.
 COPY --from=builder /etc/passwd /etc/passwd
@@ -51,7 +48,7 @@ USER rust:rust
 # Copy our build
 ARG BUNDLE
 ARG STACK
-COPY --chown=rust:rust ./artifact/${BUNDLE}/${STACK}/conf /app/conf
+COPY --chown=rust:rust ./conf /app/conf
 COPY --from=builder --chown=rust:rust /home/target/release/listener /app
 
-ENTRYPOINT ["/app/listener", "run"]
+ENTRYPOINT ["/app/listener"]

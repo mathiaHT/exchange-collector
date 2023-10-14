@@ -11,8 +11,8 @@ use deltalake::{
     },
     open_table_with_storage_options,
     operations::create::CreateBuilder,
-    s3_storage_options, DeltaTable, DeltaTableError, Schema, SchemaDataType, SchemaField,
-    SchemaTypeStruct,
+    table::builder::s3_storage_options,
+    DeltaTable, DeltaTableError, Schema, SchemaDataType, SchemaField, SchemaTypeStruct,
 };
 use dynamodb_lock::dynamo_lock_options;
 use serde::{Deserialize, Serialize};
@@ -187,11 +187,8 @@ impl MatchTable {
             storage_options.insert(s3_storage_options::AWS_ENDPOINT_URL.to_string(), endpoint);
         };
 
-        if let Ok(value) = env::var("AWS_STORAGE_ALLOW_HTTP") {
-            storage_options.insert(
-                s3_storage_options::AWS_STORAGE_ALLOW_HTTP.to_string(),
-                value,
-            );
+        if let Ok(value) = env::var("AWS_ALLOW_HTTP") {
+            storage_options.insert(s3_storage_options::AWS_ALLOW_HTTP.to_string(), value);
         }
 
         match open_table_with_storage_options(table_uri.as_str(), storage_options.clone()).await {

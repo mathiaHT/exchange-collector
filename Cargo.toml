@@ -1,16 +1,16 @@
 [package]
-name = "listener"
-version = "0.2.0"
-authors = ["Mathia Haure-Touze <mathia.haure-touze@airliquide.com>"]
+name = "exechange-collector"
+version = "0.1.0"
+authors = ["Mathia Haure-Touze <mathauretouze@gmail.com>"]
 edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-arrow               = { version = "46.0.0"}
+arrow               = { version = "47.0.0"}
 async-trait         = { version = "0.1.52" }
 chrono              = { version = "0.4.19" }
-deltalake           = { version = "0.14.0", features = ["arrow", "s3"] }
+deltalake           = { version = "0.16.0", features = ["arrow", "s3"] }
 dynamodb_lock       = { version = "0.4.3" }
 enum_dispatch       = { version = "0.3.7" }
 env_logger          = { version = "0.10.0" }
