@@ -9,6 +9,9 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+      - uses: hadolint/hadolint-action@v3.1.0
+        with:
+          dockerfile: Dockerfile
       - name: Docker meta
         id: meta
         uses: docker/metadata-action@v5
@@ -34,7 +37,7 @@ jobs:
       - name: Build
         uses: docker/build-push-action@v5
         with:
+          push: true
           context: .
           tags: ${{ steps.meta.outputs.tags }}
           platforms: linux/arm64,linux/amd64
-          buildkitd-flags: --load --push

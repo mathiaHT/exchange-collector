@@ -1,5 +1,5 @@
 [package]
-name = "exechange-collector"
+name = "exchange-collector"
 version = "0.1.0"
 authors = ["Mathia Haure-Touze <mathauretouze@gmail.com>"]
 edition = "2021"

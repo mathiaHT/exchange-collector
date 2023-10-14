@@ -49,6 +49,6 @@ USER rust:rust
 ARG BUNDLE
 ARG STACK
 COPY --chown=rust:rust ./conf /app/conf
-COPY --from=builder --chown=rust:rust /home/target/release/listener /app
+COPY --from=builder --chown=rust:rust /home/target/release/exchange-collector /app
 
-ENTRYPOINT ["/app/listener"]
+ENTRYPOINT ["/app/exchange-collector"]
