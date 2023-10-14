@@ -1,0 +1,91 @@
+service:
+  graceful_period:
+    secs: 30
+    nanos: 0
+  metrics:
+    type: otlp
+    period:
+      secs: 5
+      nanos: 0
+    endpoint: http://localhost:4317
+  channels:
+    data_capacity: 2000
+    signal_capacity: 2000
+    order_capacity: 100
+receivers:
+  - name: coinbase
+    type: exchange
+    exchange:
+      source: coinbase
+      uri: wss://ws-feed.exchange.coinbase.com
+      subscription:
+        type: subscribe
+        product_ids:
+          - BTC-USD
+          - BTC-USDT
+          - BTC-EUR
+          - DOGE-USDT
+          - ETH-BTC
+          - ETH-USDT
+        channels:
+          - matches
+    concurrency: 10
+    output: data
+    ping_period:
+      secs: 10
+      nanos: 0
+  - name: binance
+    type: exchange
+    exchange:
+      uri: wss://stream.binance.com:443/ws
+      source: binance
+      subscription:
+        id: 1
+        method: SUBSCRIBE
+        params:
+          - btcusd@trade
+          - btcusdt@trade
+          - btceur@trade
+          - dogeusdt@trade
+          - ethbtc@trade
+          - ethusdt@trade
+    concurrency: 100
+    output: data
+processors:
+  - name: candle
+    type: candle
+    periods:
+      - secs: 60
+        nanos: 0
+    filter:
+      tag_pattern: record_*
+    concurrency: 500
+    input: data
+    output: signal
+  - name: aroon
+    type: indicator
+    indicator:
+      type: aroon
+      period: 14
+      signal_zone: 0.3
+      over_zone_period: 7
+    filter:
+      tag_pattern: candle_.*
+exporters:
+  - name: delta
+    type: delta
+    concurrency: 500
+    chunk_size: 10
+    filter:
+      tag_pattern: record_*
+    period:
+      secs: 300
+      nanos: 0
+    endpoint: http://localhost:4566
+    region: us-east-1
+    lock_table: dev-local-datalake-lock
+    bucket: dev-local-datalake
+    prefix: data
+    input: data
+    channels:
+      - matches

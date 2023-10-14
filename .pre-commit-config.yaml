@@ -1,0 +1,21 @@
+repos:
+  - repo: https://github.com/zricethezav/gitleaks
+    rev: v8.15.3
+    hooks:
+      - id: gitleaks
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.5.0
+    hooks:
+      - id: check-ast
+      - id: check-toml
+      - id: check-yaml
+        args: [--allow-multiple-documents]
+      - id: check-added-large-files
+      - id: detect-aws-credentials
+      - id: detect-private-key
+      - id: pretty-format-json
+  -   repo: https://github.com/doublify/pre-commit-rust
+      rev: v1.0
+      hooks:
+      -   id: fmt
+      -   id: cargo-check

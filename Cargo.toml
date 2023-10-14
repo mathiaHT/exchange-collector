@@ -1,0 +1,51 @@
+[package]
+name = "listener"
+version = "0.2.0"
+authors = ["Mathia Haure-Touze <mathia.haure-touze@airliquide.com>"]
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+arrow               = { version = "46.0.0"}
+async-trait         = { version = "0.1.52" }
+chrono              = { version = "0.4.19" }
+deltalake           = { version = "0.14.0", features = ["arrow", "s3"] }
+dynamodb_lock       = { version = "0.4.3" }
+enum_dispatch       = { version = "0.3.7" }
+env_logger          = { version = "0.10.0" }
+futures             = { version = "0.3.19" }
+futures-util        = { version = "0.3.19" }
+http                = { version = "0.2.5" }
+itertools           = { version = "0.11.0" }
+lazy_static         = { version = "1.4.0" }
+log                 = { version = "0.4.14" }
+native-tls          = { version = "0.2.8" }
+opentelemetry       = { version = "0.20.0", features = ["rt-tokio", "metrics"]}
+opentelemetry-otlp  = { version = "0.13.0", features = ["tls", "tls-roots", "metrics"] }
+opentelemetry_sdk   = { version = "0.20.0", features = ["metrics"]}
+pin-project-lite    = { version = "0.2.7"}
+rand                = { version = "0.8.5" }
+regex               = { version = "1.7.0" }
+reqwest             = { version = "0.11", features = ["blocking", "json"] }
+rusoto_core         = { version = "0.48.0", default-features = true  }
+rusoto_dynamodb     = { version = "0.48.0", default-features = true }
+rusoto_s3           = { version = "0.48.0", default-features = true }
+serde               = { version = "1.0.130", features = ["derive"] }
+serde_dynamo        = { version = "4.0.9", features = ["rusoto_dynamodb+0_48"] }
+serde_json          = { version = "1.0.72" }
+serde_yaml          = { version = "0.9.10" }
+structopt           = { version = "0.3.23" }
+strum               = { version = "0.25.0" }
+strum_macros        = { version = "0.25.0" }
+thiserror           = { version = "1.0.30" }
+tokio               = { version = "1.0.2", features = ["full"] }
+tokio-stream        = { version = "0.1.8", features = ["sync"] }
+tokio-tungstenite   = { version = "0.20.0", features = ["native-tls"] }
+uuid                = { version = "1.1.2", features = ["serde", "v4"] }
+url                 = { version = "2.2.2", features = ["serde"] }
+yata                = { version = "0.6.1" }
+
+[dev-dependencies]
+rstest              = { version = "0.18.1" }
+tempfile            = { version = "3.2.0" }

@@ -1,0 +1,504 @@
+service:
+  graceful_period:
+    secs: 30
+    nanos: 0
+  metrics:
+    type: otlp
+    period:
+      secs: 5
+      nanos: 0
+    endpoint: http://localhost:4317
+receivers:
+  - name: coinbase_websocket
+    type: coinbase
+    config:
+      uri: 'wss://ws-feed.exchange.coinbase.com'
+      action:
+        source: coinbase
+        type: subscribe
+        product_ids:
+          - ADA-BTC
+          - ADA-EUR
+          - ADA-USDT
+          - APE-EUR
+          - APE-USDT
+          - ATOM-BTC
+          - AVAX-EUR
+          - BTC-EUR
+          - BTC-USDT
+          - CBETH-ETH
+          - CHZ-EUR
+          - CHZ-USDT
+          - DOGE-BTC
+          - DOGE-EUR
+          - DOGE-USDT
+          - ETH-BTC
+          - ETH-EUR
+          - ETH-USD
+          - ETH-USDT
+          - GALA-USDT
+          - HFT-USDT
+          - LTC-BTC
+          - LTC-EUR
+          - MAGIC-USD
+          - MATIC-EUR
+          - SOL-EUR
+          - SOL-USDT
+          - USDC-EUR
+          - USDT-EUR
+        channels:
+          - matches
+    constraints:
+      concurrency: 5
+      output: data
+processors:
+  - name: candle_1m
+    type: candle
+    config:
+      period:
+        secs: 60
+        nanos: 0
+    filter: websocket_.*
+    constraints:
+      concurrency: 5
+      input: data
+      output: signal
+  - name: candle_2m
+    type: candle
+    config:
+      period:
+        secs: 120
+        nanos: 0
+    filter: websocket_.*
+    constraints:
+      concurrency: 5
+      input: data
+      output: signal
+  - name: candle_15m
+    type: candle
+    config:
+      period:
+        secs: 300
+        nanos: 0
+    filter: websocket_.*
+    constraints:
+      concurrency: 5
+      input: data
+      output: signal
+  - name: candle_30m
+    type: candle
+    config:
+      period:
+        secs: 900
+        nanos: 0
+    filter: websocket_.*
+    constraints:
+      concurrency: 5
+      input: data
+      output: signal
+  - name: candle_1h
+    type: candle
+    config:
+      period:
+        secs: 3600
+        nanos: 0
+    filter: websocket_.*
+    constraints:
+      concurrency: 5
+      input: data
+      output: signal
+  - name: aroon
+    type: indicator
+    config:
+      indicator:
+        type: aroon
+        period: 14
+        signal_zone: 0.3
+        over_zone_period: 7
+    filter: candle_.*
+  - name: average_directional_index
+    type: indicator
+    config:
+      indicator:
+        type: average_directional_index
+        method1:
+          rma: 14
+        method2:
+          rma: 14
+        period1: 1
+        zone: 0.2
+    filter: candle_.*
+  - name: awesome_oscillator
+    type: indicator
+    config:
+      indicator:
+        type: awesome_oscillator
+        ma1:
+          sma: 34
+        ma2:
+          sma: 5
+        source: hl2
+        left: 1
+        right: 1
+        conseq_peaks: 2
+    filter: candle_.*
+  - name: bollinger_bands
+    type: indicator
+    config:
+      indicator:
+        type: bollinger_bands
+        avg_size: 20
+        sigma: 2.0
+        source: close
+    filter: candle_.*
+  - name: chainkin_money_flow
+    type: indicator
+    config:
+      indicator:
+        type: chainkin_money_flow
+        size: 20
+    filter: candle_.*
+  - name: chainkin_oscillator
+    type: indicator
+    config:
+      indicator:
+        type: chainkin_oscillator
+        ma1:
+          ema: 3
+        ma2:
+          ema: 10
+        window: 0
+    filter: candle_.*
+  - name: chande_kroll_stop
+    type: indicator
+    config:
+      indicator:
+        type: chande_kroll_stop
+        ma:
+          sma: 10
+        x: 1
+        q: 9
+        source: close
+    filter: candle_.*
+  - name: chande_momentum_oscillator
+    type: indicator
+    config:
+      indicator:
+        type: chande_momentum_oscillator
+        period: 9
+        zone: 0.5
+        source: close
+    filter: candle_.*
+  - name: commodity_channel_index
+    type: indicator
+    config:
+      indicator:
+        type: commodity_channel_index
+        period: 18
+        zone: 1.0
+        source: close
+    filter: candle_.*
+  - name: coppock_curve
+    type: indicator
+    config:
+      indicator:
+        type: coppock_curve
+        ma1:
+          wma: 10
+        s3_ma:
+          ema: 5
+        period2: 14
+        period3: 11
+        s2_left: 4
+        s2_right: 2
+        source: close
+    filter: candle_.*
+  - name: detrended_price_oscillator
+    type: indicator
+    config:
+      indicator:
+        type: detrended_price_oscillator
+        ma:
+          sma: 10
+        source: close
+    filter: candle_.*
+  - name: donchian_channel
+    type: indicator
+    config:
+      indicator:
+        type: donchian_channel
+        period: 20
+    filter: candle_.*
+  - name: ease_of_movement
+    type: indicator
+    config:
+      indicator:
+        type: ease_of_movement
+        ma:
+          sma: 13
+        period2: 1
+    filter: candle_.*
+  - name: elders_force_index
+    type: indicator
+    config:
+      indicator:
+        type: elders_force_index
+        ma:
+          ema: 13
+        period2: 1
+        source: close
+    filter: candle_.*
+  - name: envelopes
+    type: indicator
+    config:
+      indicator:
+        type: envelopes
+        ma:
+          sma: 13
+        k: 0.1
+        source: close
+        source2: close
+    filter: candle_.*
+  - name: fisher_transform
+    type: indicator
+    config:
+      indicator:
+        type: fisher_transform
+        period1: 9
+        zone: 1.5
+        signal:
+          sma: 2
+        source: tp
+    filter: candle_.*
+  - name: hull_moving_average
+    type: indicator
+    config:
+      indicator:
+        type: hull_moving_average
+        period: 9
+        left: 3
+        right: 2
+        source: close
+    filter: candle_.*
+  - name: ichimoku_cloud
+    type: indicator
+    config:
+      indicator:
+        type: ichimoku_cloud
+        l1: 9
+        l2: 26
+        l3: 52
+        m: 26
+        source: close
+    filter: candle_.*
+  - name: kaufman
+    type: indicator
+    config:
+      indicator:
+        type: kaufman
+        period1: 10
+        period2: 2
+        period3: 30
+        filter_period: 10
+        square_smooth: true
+        k: 0.3
+        source: close
+    filter: candle_.*
+  - name: keltner_channel
+    type: indicator
+    config:
+      indicator:
+        type: keltner_channel
+        ma:
+          ema: 20
+        sigma: 1.0
+        source: close
+    filter: candle_.*
+  - name: klinger_volume_oscillator
+    type: indicator
+    config:
+      indicator:
+        type: klinger_volume_oscillator
+        ma1:
+          ema: 34
+        ma2:
+          ema: 55
+        signal:
+          ema: 13
+    filter: candle_.*
+  - name: know_sure_thing
+    type: indicator
+    config:
+      indicator:
+        type: know_sure_thing
+        period1: 10
+        period2: 15
+        period3: 20
+        period4: 30
+        ma1:
+          sma: 10
+        ma2:
+          sma: 10
+        ma3:
+          sma: 10
+        ma4:
+          sma: 15
+        signal:
+          sma: 9
+    filter: candle_.*
+  - name: macd
+    type: indicator
+    config:
+      indicator:
+        type: macd
+        ma1:
+          ema: 12
+        ma2:
+          ema: 26
+        signal:
+          ema: 9
+        source: close
+    filter: candle_.*
+  - name: momentum_index
+    type: indicator
+    config:
+      indicator:
+        type: momentum_index
+        period1: 10
+        period2: 1
+        source: close
+    filter: candle_.*
+  - name: money_flow_index
+    type: indicator
+    config:
+      indicator:
+        type: money_flow_index
+        period: 14
+        zone: 0.2
+    filter: candle_.*
+  - name: parabolic_sar
+    type: indicator
+    config:
+      indicator:
+        type: parabolic_sar
+        af_step: 0.02
+        af_max: 0.2
+    filter: candle_.*
+  - name: pivot_reversal_strategy
+    type: indicator
+    config:
+      indicator:
+        type: pivot_reversal_strategy
+        left: 2
+        right: 2
+    filter: candle_.*
+  - name: price_channel_strategy
+    type: indicator
+    config:
+      indicator:
+        type: price_channel_strategy
+        period: 20
+        sigma: 1.0
+    filter: candle_.*
+  - name: relative_strength_index
+    type: indicator
+    config:
+      indicator:
+        type: relative_strength_index
+        ma:
+          ema: 14
+        zone: 0.3
+        source: close
+    filter: candle_.*
+  - name: relative_vigor_index
+    type: indicator
+    config:
+      indicator:
+        type: relative_vigor_index
+        period1: 10
+        period2: 4
+        signal:
+          swma: 4
+        zone: 0.25
+    filter: candle_.*
+  - name: smi_ergodic_indicator
+    type: indicator
+    config:
+      indicator:
+        type: smi_ergodic_indicator
+        period1: 20
+        period2: 5
+        signal:
+          ema: 5
+        zone: 0.2
+        source: close
+    filter: candle_.*
+  - name: stochastic_oscillator
+    type: indicator
+    config:
+      indicator:
+        type: stochastic_oscillator
+        period: 14
+        ma:
+          sma: 14
+        signal:
+          sma: 13
+        zone: 0.2
+    filter: candle_.*
+  - name: trend_strength_index
+    type: indicator
+    config:
+      indicator:
+        type: trend_strength_index
+        period: 14
+        zone: 0.75
+        reverse_offset: 2
+        source: close
+    filter: candle_.*
+  - name: trix
+    type: indicator
+    config:
+      indicator:
+        type: trix
+        period1: 18
+        signal:
+          ema: 6
+        source: close
+    filter: candle_.*
+  - name: true_strength_index
+    type: indicator
+    config:
+      indicator:
+        type: true_strength_index
+        period1: 25
+        period2: 13
+        period3: 13
+        zone: 0.25
+        source: close
+    filter: candle_.*
+exporters:
+  - name: coinbase_match_table
+    type: delta
+    config:
+      provider: aws
+      table:
+        database: coinbase
+        table: match
+      export_period:
+        secs: 15
+        nanos: 0
+    filter: websocket_coinbase_match.*
+    constraints:
+      concurrency: 5
+      input: data
+  - name: market_event
+    type: market_event
+    config:
+      export_period:
+        secs: 1
+        nanos: 0
+    filter: indicator_.*
+    constraints:
+      concurrency: 2
+      input: signal
+
