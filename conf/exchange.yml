@@ -7,11 +7,12 @@ service:
     period:
       secs: 5
       nanos: 0
-    endpoint: http://localhost:4317
+    endpoint: http://otel:4317
   channels:
     data_capacity: 2000
     signal_capacity: 2000
     order_capacity: 100
+
 receivers:
   - name: coinbase
     type: exchange
@@ -26,7 +27,6 @@ receivers:
           - BTC-EUR
           - DOGE-USDT
           - ETH-BTC
-          - ETH-USDT
         channels:
           - matches
     concurrency: 10
@@ -48,9 +48,32 @@ receivers:
           - btceur@trade
           - dogeusdt@trade
           - ethbtc@trade
-          - ethusdt@trade
     concurrency: 100
     output: data
+  - name: kucoin
+    type: exchange
+    exchange:
+      uri: https://api.kucoin.com/api/v1/bullet-public
+      source: kucoin
+      subscription:
+        id: 1
+        type: subscribe
+        topic: >-
+          /market/match:
+          BTC-USDT,
+          BTC-USD,
+          BTC-EUR,
+          DOGE-USDT,
+          ETH-BTC,
+          ETH-USD
+        private_channel: false
+        response: false
+    ping_period:
+      secs: 10
+      nanos: 0
+    concurrency: 100
+    output: data
+
 processors:
   - name: candle
     type: candle
@@ -71,6 +94,7 @@ processors:
       over_zone_period: 7
     filter:
       tag_pattern: candle_.*
+
 exporters:
   - name: delta
     type: delta
@@ -81,11 +105,11 @@ exporters:
     period:
       secs: 300
       nanos: 0
-    endpoint: http://localhost:4566
+    endpoint: http://localstack:4566
     region: us-east-1
-    lock_table: dev-local-datalake-lock
-    bucket: dev-local-datalake
-    prefix: data
+    lock_table: datalake-lock
+    bucket: datalake
+    prefix: raw
     input: data
     channels:
       - matches

@@ -1,0 +1,16 @@
+receivers:
+  otlp:
+    protocols:
+      grpc:
+      http:
+
+exporters:
+  prometheus:
+    endpoint: "otel:8889"
+    namespace: "tradehook"
+
+service:
+  pipelines:
+    metrics/match:
+      receivers: [otlp]
+      exporters: [prometheus]

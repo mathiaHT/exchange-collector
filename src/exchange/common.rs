@@ -42,7 +42,7 @@ pub enum Symbol {
     #[serde(alias = "ETHUSD", alias = "ETH-USD", alias = "ethusd")]
     #[strum(to_string = "eth-usd")]
     Ethusd,
-    #[serde(alias = "PNTUSDT", alias = "PNT-USDT", alias = "ethusdt")]
+    #[serde(alias = "ETHUSDT", alias = "ETH-USDT", alias = "ethusdt")]
     #[strum(to_string = "eth-usdt")]
     Ethusdt,
     #[serde(alias = "PNTUSDT", alias = "PNT-USDT", alias = "pntusdt")]

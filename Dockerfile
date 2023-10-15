@@ -1,8 +1,6 @@
 # syntax=docker/dockerfile:1.2
 
-# Inspired by https://kerkour.com/rust-small-docker-image
 ARG RUST_VERSION="1.73.0"
-
 FROM rust:${RUST_VERSION} AS builder
 
 RUN apt-get update -y && \
@@ -46,8 +44,6 @@ WORKDIR /app
 USER rust:rust
 
 # Copy our build
-ARG BUNDLE
-ARG STACK
 COPY --chown=rust:rust ./conf /app/conf
 COPY --from=builder --chown=rust:rust /home/target/release/exchange-collector /app
 

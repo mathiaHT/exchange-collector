@@ -1,0 +1,938 @@
+{
+    "annotations": {
+        "list": [
+            {
+                "builtIn": 1,
+                "datasource": {
+                    "type": "datasource",
+                    "uid": "grafana"
+                },
+                "enable": true,
+                "hide": true,
+                "iconColor": "rgba(0, 211, 255, 1)",
+                "name": "Annotations & Alerts",
+                "target": {
+                    "limit": 100,
+                    "matchAny": false,
+                    "tags": [],
+                    "type": "dashboard"
+                },
+                "type": "dashboard"
+            }
+        ]
+    },
+    "editable": true,
+    "fiscalYearStartMonth": 0,
+    "graphTooltip": 0,
+    "id": 1,
+    "iteration": 1689053365536,
+    "links": [],
+    "liveNow": false,
+    "panels": [
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "PBFA97CFB590B2093"
+            },
+            "fieldConfig": {
+                "defaults": {
+                    "color": {
+                        "mode": "continuous-GrYlRd"
+                    },
+                    "custom": {
+                        "axisLabel": "",
+                        "axisPlacement": "auto",
+                        "barAlignment": 0,
+                        "drawStyle": "line",
+                        "fillOpacity": 0,
+                        "gradientMode": "none",
+                        "hideFrom": {
+                            "legend": false,
+                            "tooltip": false,
+                            "viz": false
+                        },
+                        "lineInterpolation": "stepAfter",
+                        "lineStyle": {
+                            "fill": "solid"
+                        },
+                        "lineWidth": 1,
+                        "pointSize": 5,
+                        "scaleDistribution": {
+                            "type": "linear"
+                        },
+                        "showPoints": "auto",
+                        "spanNulls": false,
+                        "stacking": {
+                            "group": "A",
+                            "mode": "none"
+                        },
+                        "thresholdsStyle": {
+                            "mode": "off"
+                        }
+                    },
+                    "decimals": 2,
+                    "mappings": [],
+                    "thresholds": {
+                        "mode": "absolute",
+                        "steps": [
+                            {
+                                "color": "green",
+                                "value": null
+                            }
+                        ]
+                    }
+                },
+                "overrides": []
+            },
+            "gridPos": {
+                "h": 7,
+                "w": 12,
+                "x": 0,
+                "y": 0
+            },
+            "id": 10,
+            "interval": "${candle}s",
+            "options": {
+                "candleStyle": "candles",
+                "colorStrategy": "open-close",
+                "colors": {
+                    "down": "red",
+                    "up": "green"
+                },
+                "includeAllFields": false,
+                "legend": {
+                    "calcs": [],
+                    "displayMode": "hidden",
+                    "placement": "bottom"
+                },
+                "mode": "candles"
+            },
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "PBFA97CFB590B2093"
+                    },
+                    "editorMode": "code",
+                    "expr": "tradehook_open{candle_period=\"$candle\", product=\"$product\", source=\"$source\"}",
+                    "legendFormat": "open",
+                    "range": true,
+                    "refId": "A"
+                },
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "PBFA97CFB590B2093"
+                    },
+                    "editorMode": "code",
+                    "expr": "tradehook_high{candle_period=\"$candle\", product=\"$product\", source=\"$source\"}",
+                    "hide": false,
+                    "legendFormat": "high",
+                    "range": true,
+                    "refId": "B"
+                },
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "PBFA97CFB590B2093"
+                    },
+                    "editorMode": "code",
+                    "expr": "tradehook_low{candle_period=\"$candle\", product=\"$product\", source=\"$source\"}",
+                    "hide": false,
+                    "legendFormat": "low",
+                    "range": true,
+                    "refId": "C"
+                },
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "PBFA97CFB590B2093"
+                    },
+                    "editorMode": "code",
+                    "expr": "tradehook_close{candle_period=\"$candle\", product=\"$product\", source=\"$source\"}",
+                    "hide": false,
+                    "legendFormat": "close",
+                    "range": true,
+                    "refId": "D"
+                },
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "PBFA97CFB590B2093"
+                    },
+                    "editorMode": "code",
+                    "expr": "tradehook_volume{candle_period=\"$candle\", product=\"$product\", source=\"$source\"}",
+                    "hide": false,
+                    "legendFormat": "volume",
+                    "range": true,
+                    "refId": "E"
+                }
+            ],
+            "title": "Candle",
+            "type": "candlestick"
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "PBFA97CFB590B2093"
+            },
+            "fieldConfig": {
+                "defaults": {
+                    "color": {
+                        "mode": "palette-classic"
+                    },
+                    "custom": {
+                        "axisLabel": "",
+                        "axisPlacement": "auto",
+                        "barAlignment": 0,
+                        "drawStyle": "line",
+                        "fillOpacity": 0,
+                        "gradientMode": "none",
+                        "hideFrom": {
+                            "legend": false,
+                            "tooltip": false,
+                            "viz": false
+                        },
+                        "lineInterpolation": "linear",
+                        "lineWidth": 1,
+                        "pointSize": 5,
+                        "scaleDistribution": {
+                            "type": "linear"
+                        },
+                        "showPoints": "auto",
+                        "spanNulls": false,
+                        "stacking": {
+                            "group": "A",
+                            "mode": "normal"
+                        },
+                        "thresholdsStyle": {
+                            "mode": "off"
+                        }
+                    },
+                    "mappings": [],
+                    "thresholds": {
+                        "mode": "absolute",
+                        "steps": [
+                            {
+                                "color": "green",
+                                "value": null
+                            },
+                            {
+                                "color": "red",
+                                "value": 5
+                            }
+                        ]
+                    }
+                },
+                "overrides": []
+            },
+            "gridPos": {
+                "h": 3,
+                "w": 9,
+                "x": 12,
+                "y": 0
+            },
+            "id": 6,
+            "options": {
+                "legend": {
+                    "calcs": [
+                        "last"
+                    ],
+                    "displayMode": "list",
+                    "placement": "right"
+                },
+                "tooltip": {
+                    "mode": "single",
+                    "sort": "none"
+                }
+            },
+            "pluginVersion": "9.0.2",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "PBFA97CFB590B2093"
+                    },
+                    "editorMode": "builder",
+                    "exemplar": false,
+                    "expr": "sum by(actor_name) (delta(tradehook_task_count[${candle}s]))",
+                    "hide": false,
+                    "instant": false,
+                    "legendFormat": "{{actor_name}}",
+                    "range": true,
+                    "refId": "A"
+                }
+            ],
+            "title": "Task count",
+            "type": "timeseries"
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "PBFA97CFB590B2093"
+            },
+            "fieldConfig": {
+                "defaults": {
+                    "color": {
+                        "mode": "thresholds"
+                    },
+                    "mappings": [],
+                    "thresholds": {
+                        "mode": "absolute",
+                        "steps": [
+                            {
+                                "color": "green",
+                                "value": null
+                            },
+                            {
+                                "color": "red",
+                                "value": 80
+                            }
+                        ]
+                    }
+                },
+                "overrides": []
+            },
+            "gridPos": {
+                "h": 8,
+                "w": 3,
+                "x": 21,
+                "y": 0
+            },
+            "id": 7,
+            "options": {
+                "displayMode": "gradient",
+                "minVizHeight": 10,
+                "minVizWidth": 0,
+                "orientation": "horizontal",
+                "reduceOptions": {
+                    "calcs": [
+                        "lastNotNull"
+                    ],
+                    "fields": "",
+                    "values": false
+                },
+                "showUnfilled": true
+            },
+            "pluginVersion": "9.0.2",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "PBFA97CFB590B2093"
+                    },
+                    "editorMode": "code",
+                    "expr": "sum by(actor_name) (tradehook_flush_duration)",
+                    "legendFormat": "{{actor_name}}",
+                    "range": true,
+                    "refId": "A"
+                }
+            ],
+            "title": "Flush duration",
+            "type": "bargauge"
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "PBFA97CFB590B2093"
+            },
+            "fieldConfig": {
+                "defaults": {
+                    "color": {
+                        "mode": "palette-classic"
+                    },
+                    "custom": {
+                        "axisLabel": "",
+                        "axisPlacement": "auto",
+                        "barAlignment": 0,
+                        "drawStyle": "line",
+                        "fillOpacity": 0,
+                        "gradientMode": "none",
+                        "hideFrom": {
+                            "legend": false,
+                            "tooltip": false,
+                            "viz": false
+                        },
+                        "lineInterpolation": "linear",
+                        "lineWidth": 1,
+                        "pointSize": 5,
+                        "scaleDistribution": {
+                            "type": "linear"
+                        },
+                        "showPoints": "auto",
+                        "spanNulls": false,
+                        "stacking": {
+                            "group": "A",
+                            "mode": "none"
+                        },
+                        "thresholdsStyle": {
+                            "mode": "off"
+                        }
+                    },
+                    "mappings": [],
+                    "thresholds": {
+                        "mode": "absolute",
+                        "steps": [
+                            {
+                                "color": "green",
+                                "value": null
+                            },
+                            {
+                                "color": "red",
+                                "value": 80
+                            }
+                        ]
+                    }
+                },
+                "overrides": []
+            },
+            "gridPos": {
+                "h": 5,
+                "w": 9,
+                "x": 12,
+                "y": 3
+            },
+            "id": 4,
+            "options": {
+                "legend": {
+                    "calcs": [
+                        "last",
+                        "max",
+                        "sum",
+                        "mean"
+                    ],
+                    "displayMode": "table",
+                    "placement": "right",
+                    "sortBy": "Last",
+                    "sortDesc": true
+                },
+                "tooltip": {
+                    "mode": "single",
+                    "sort": "none"
+                }
+            },
+            "pluginVersion": "9.0.2",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "PBFA97CFB590B2093"
+                    },
+                    "editorMode": "builder",
+                    "exemplar": true,
+                    "expr": "sum by(actor_name) (rate(tradehook_handle_success[$__rate_interval]))",
+                    "hide": false,
+                    "interval": "",
+                    "legendFormat": "{{actor_name}}",
+                    "range": true,
+                    "refId": "D"
+                }
+            ],
+            "title": "Handle",
+            "type": "timeseries"
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "PBFA97CFB590B2093"
+            },
+            "fieldConfig": {
+                "defaults": {
+                    "color": {
+                        "mode": "continuous-GrYlRd"
+                    },
+                    "custom": {
+                        "axisLabel": "",
+                        "axisPlacement": "auto",
+                        "axisSoftMin": 0,
+                        "fillOpacity": 80,
+                        "gradientMode": "none",
+                        "hideFrom": {
+                            "legend": false,
+                            "tooltip": false,
+                            "viz": false
+                        },
+                        "lineWidth": 1,
+                        "scaleDistribution": {
+                            "type": "linear"
+                        }
+                    },
+                    "decimals": 2,
+                    "mappings": [],
+                    "thresholds": {
+                        "mode": "absolute",
+                        "steps": [
+                            {
+                                "color": "green",
+                                "value": null
+                            }
+                        ]
+                    }
+                },
+                "overrides": []
+            },
+            "gridPos": {
+                "h": 5,
+                "w": 12,
+                "x": 0,
+                "y": 7
+            },
+            "id": 11,
+            "interval": "${candle}s",
+            "options": {
+                "barRadius": 0,
+                "barWidth": 0.97,
+                "groupWidth": 0.7,
+                "legend": {
+                    "calcs": [],
+                    "displayMode": "hidden",
+                    "placement": "bottom"
+                },
+                "orientation": "auto",
+                "showValue": "auto",
+                "stacking": "none",
+                "tooltip": {
+                    "mode": "single",
+                    "sort": "none"
+                },
+                "xField": "Time",
+                "xTickLabelRotation": 0,
+                "xTickLabelSpacing": 100
+            },
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "PBFA97CFB590B2093"
+                    },
+                    "editorMode": "code",
+                    "expr": "tradehook_volume{candle_period=\"$candle\", product=\"$product\", source=\"$source\"}",
+                    "hide": false,
+                    "legendFormat": "volume",
+                    "range": true,
+                    "refId": "E"
+                }
+            ],
+            "title": "Volume",
+            "type": "barchart"
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "PBFA97CFB590B2093"
+            },
+            "fieldConfig": {
+                "defaults": {
+                    "color": {
+                        "mode": "palette-classic"
+                    },
+                    "custom": {
+                        "axisLabel": "",
+                        "axisPlacement": "auto",
+                        "barAlignment": 0,
+                        "drawStyle": "line",
+                        "fillOpacity": 0,
+                        "gradientMode": "none",
+                        "hideFrom": {
+                            "legend": false,
+                            "tooltip": false,
+                            "viz": false
+                        },
+                        "lineInterpolation": "stepAfter",
+                        "lineStyle": {
+                            "fill": "solid"
+                        },
+                        "lineWidth": 1,
+                        "pointSize": 3,
+                        "scaleDistribution": {
+                            "type": "linear"
+                        },
+                        "showPoints": "never",
+                        "spanNulls": false,
+                        "stacking": {
+                            "group": "A",
+                            "mode": "none"
+                        },
+                        "thresholdsStyle": {
+                            "mode": "off"
+                        }
+                    },
+                    "decimals": 2,
+                    "mappings": [],
+                    "thresholds": {
+                        "mode": "absolute",
+                        "steps": [
+                            {
+                                "color": "green",
+                                "value": null
+                            },
+                            {
+                                "color": "red",
+                                "value": 80
+                            }
+                        ]
+                    }
+                },
+                "overrides": []
+            },
+            "gridPos": {
+                "h": 9,
+                "w": 12,
+                "x": 12,
+                "y": 8
+            },
+            "id": 8,
+            "interval": "${candle}s",
+            "options": {
+                "legend": {
+                    "calcs": [],
+                    "displayMode": "list",
+                    "placement": "bottom"
+                },
+                "tooltip": {
+                    "mode": "single",
+                    "sort": "none"
+                }
+            },
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "PBFA97CFB590B2093"
+                    },
+                    "editorMode": "builder",
+                    "expr": "tradehook_indicator_value{indicator=~\"$indicator\", product=~\"$product\", candle_period=\"$candle\", source=\"$source\"}",
+                    "hide": false,
+                    "legendFormat": "{{indicator}}_{{value}}",
+                    "range": true,
+                    "refId": "A"
+                }
+            ],
+            "title": "Indicator values",
+            "type": "timeseries"
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "PBFA97CFB590B2093"
+            },
+            "fieldConfig": {
+                "defaults": {
+                    "color": {
+                        "mode": "palette-classic"
+                    },
+                    "custom": {
+                        "axisLabel": "",
+                        "axisPlacement": "left",
+                        "barAlignment": 0,
+                        "drawStyle": "line",
+                        "fillOpacity": 0,
+                        "gradientMode": "none",
+                        "hideFrom": {
+                            "legend": false,
+                            "tooltip": false,
+                            "viz": false
+                        },
+                        "lineInterpolation": "stepAfter",
+                        "lineStyle": {
+                            "fill": "solid"
+                        },
+                        "lineWidth": 1,
+                        "pointSize": 5,
+                        "scaleDistribution": {
+                            "type": "linear"
+                        },
+                        "showPoints": "never",
+                        "spanNulls": 3600000,
+                        "stacking": {
+                            "group": "A",
+                            "mode": "none"
+                        },
+                        "thresholdsStyle": {
+                            "mode": "off"
+                        }
+                    },
+                    "decimals": 2,
+                    "mappings": [],
+                    "thresholds": {
+                        "mode": "absolute",
+                        "steps": [
+                            {
+                                "color": "green",
+                                "value": null
+                            },
+                            {
+                                "color": "red",
+                                "value": 80
+                            }
+                        ]
+                    }
+                },
+                "overrides": []
+            },
+            "gridPos": {
+                "h": 6,
+                "w": 12,
+                "x": 0,
+                "y": 12
+            },
+            "id": 2,
+            "interval": "${candle}s",
+            "options": {
+                "legend": {
+                    "calcs": [],
+                    "displayMode": "list",
+                    "placement": "bottom"
+                },
+                "tooltip": {
+                    "mode": "single",
+                    "sort": "none"
+                }
+            },
+            "pluginVersion": "9.0.2",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "PBFA97CFB590B2093"
+                    },
+                    "editorMode": "code",
+                    "expr": "tradehook_indicator_signal{indicator=~\"$indicator\", product=~\"$product\", candle_period=\"$candle\", source=\"$source\"}",
+                    "hide": false,
+                    "legendFormat": "{{indicator}}_{{signal}}",
+                    "range": true,
+                    "refId": "A"
+                }
+            ],
+            "title": "Indicator signals",
+            "type": "timeseries"
+        }
+    ],
+    "refresh": "5s",
+    "schemaVersion": 36,
+    "style": "dark",
+    "tags": [],
+    "templating": {
+        "list": [
+            {
+                "current": {
+                    "selected": false,
+                    "text": "binance",
+                    "value": "binance"
+                },
+                "datasource": {
+                    "type": "prometheus",
+                    "uid": "PBFA97CFB590B2093"
+                },
+                "definition": "label_values(source)",
+                "hide": 0,
+                "includeAll": false,
+                "label": "Source",
+                "multi": false,
+                "name": "source",
+                "options": [],
+                "query": {
+                    "query": "label_values(source)",
+                    "refId": "StandardVariableQuery"
+                },
+                "refresh": 1,
+                "regex": "",
+                "skipUrlSync": false,
+                "sort": 0,
+                "type": "query"
+            },
+            {
+                "current": {
+                    "selected": false,
+                    "text": "btc-usdt",
+                    "value": "btc-usdt"
+                },
+                "datasource": {
+                    "type": "prometheus",
+                    "uid": "PBFA97CFB590B2093"
+                },
+                "definition": "label_values(product)",
+                "hide": 0,
+                "includeAll": false,
+                "label": "Product",
+                "multi": false,
+                "name": "product",
+                "options": [],
+                "query": {
+                    "query": "label_values(product)",
+                    "refId": "StandardVariableQuery"
+                },
+                "refresh": 2,
+                "regex": "",
+                "skipUrlSync": false,
+                "sort": 1,
+                "type": "query"
+            },
+            {
+                "current": {
+                    "selected": true,
+                    "text": [
+                        "aroon"
+                    ],
+                    "value": [
+                        "aroon"
+                    ]
+                },
+                "datasource": {
+                    "type": "prometheus",
+                    "uid": "PBFA97CFB590B2093"
+                },
+                "definition": "label_values(indicator)",
+                "hide": 0,
+                "includeAll": true,
+                "label": "Indicator",
+                "multi": true,
+                "name": "indicator",
+                "options": [],
+                "query": {
+                    "query": "label_values(indicator)",
+                    "refId": "StandardVariableQuery"
+                },
+                "refresh": 2,
+                "regex": "",
+                "skipUrlSync": false,
+                "sort": 1,
+                "type": "query"
+            },
+            {
+                "current": {
+                    "selected": false,
+                    "text": "60",
+                    "value": "60"
+                },
+                "datasource": {
+                    "type": "prometheus",
+                    "uid": "PBFA97CFB590B2093"
+                },
+                "definition": "label_values(period)",
+                "hide": 0,
+                "includeAll": false,
+                "label": "Candle Period",
+                "multi": false,
+                "name": "candle",
+                "options": [],
+                "query": {
+                    "query": "label_values(candle_period)",
+                    "refId": "StandardVariableQuery"
+                },
+                "refresh": 2,
+                "regex": "",
+                "skipUrlSync": false,
+                "sort": 0,
+                "type": "query"
+            },
+            {
+                "current": {
+                    "selected": false,
+                    "text": "bollingerbands",
+                    "value": "bollingerbands"
+                },
+                "description": "Indicators which values are moving average like",
+                "hide": 2,
+                "includeAll": false,
+                "multi": false,
+                "name": "ma_indicators",
+                "options": [
+                    {
+                        "selected": true,
+                        "text": "bollingerbands",
+                        "value": "bollingerbands"
+                    },
+                    {
+                        "selected": false,
+                        "text": "chaikinoscillator",
+                        "value": "chaikinoscillator"
+                    },
+                    {
+                        "selected": false,
+                        "text": "chandekrollstop",
+                        "value": "chandekrollstop"
+                    },
+                    {
+                        "selected": false,
+                        "text": "commoditychannelindex",
+                        "value": "commoditychannelindex"
+                    },
+                    {
+                        "selected": false,
+                        "text": "donchianchannel",
+                        "value": "donchianchannel"
+                    },
+                    {
+                        "selected": false,
+                        "text": "eldersforceindex",
+                        "value": "eldersforceindex"
+                    },
+                    {
+                        "selected": false,
+                        "text": "envelopes",
+                        "value": "envelopes"
+                    },
+                    {
+                        "selected": false,
+                        "text": "fishertransform",
+                        "value": "fishertransform"
+                    },
+                    {
+                        "selected": false,
+                        "text": "hullmovingaverage",
+                        "value": "hullmovingaverage"
+                    },
+                    {
+                        "selected": false,
+                        "text": "ichimokucloud",
+                        "value": "ichimokucloud"
+                    },
+                    {
+                        "selected": false,
+                        "text": "kaufman",
+                        "value": "kaufman"
+                    },
+                    {
+                        "selected": false,
+                        "text": "keltnetchannel",
+                        "value": "keltnetchannel"
+                    },
+                    {
+                        "selected": false,
+                        "text": "klingrvolumeoscillator",
+                        "value": "klingrvolumeoscillator"
+                    },
+                    {
+                        "selected": false,
+                        "text": "paraboliscar",
+                        "value": "paraboliscar"
+                    },
+                    {
+                        "selected": false,
+                        "text": "pricechannelstrategy",
+                        "value": "pricechannelstrategy"
+                    },
+                    {
+                        "selected": false,
+                        "text": "trix",
+                        "value": "trix"
+                    }
+                ],
+                "query": "bollingerbands, chaikinoscillator, chandekrollstop, commoditychannelindex, donchianchannel, eldersforceindex, envelopes, fishertransform, hullmovingaverage, ichimokucloud, kaufman, keltnetchannel, klingrvolumeoscillator, paraboliscar, pricechannelstrategy, trix",
+                "skipUrlSync": false,
+                "type": "custom"
+            }
+        ]
+    },
+    "time": {
+        "from": "now-15m",
+        "to": "now"
+    },
+    "timepicker": {},
+    "timezone": "",
+    "title": "Matches",
+    "uid": "matches",
+    "version": 2,
+    "weekStart": ""
+}

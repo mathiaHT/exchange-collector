@@ -1,0 +1,112 @@
+version: "3.8"
+
+name: localdev
+
+networks:
+  localdev:
+    name: localdev
+    driver: bridge
+
+services:
+  localstack:
+    image: localstack/localstack:2.3.1
+    networks:
+      - localdev
+    ports:
+      - "4566:4566"
+    environment:
+      - DEFAULT_REGION=${AWS_DEFAULT_REGION:-us-east-1}
+      - DEBUG=${DEBUG:-1}
+      - DOCKER_HOST=unix:///var/run/docker.sock
+      - LAMBDA_EXECUTOR=${LAMBDA_EXECUTOR:-docker-reuse}
+      - HOSTNAME_FROM_LAMBDA=http://localstack:4566
+      - SERVICES=apigateway,cloudformation,dynamodb,iam,lambda,s3,sqs,sns,ssm
+      - AWS_ACCESS_KEY_ID=deltalake
+      - AWS_SECRET_ACCESS_KEY=weloverust
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:4566/_localstack/health" ]
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
+
+  deploy-aws-resources:
+    image: localstack/localstack:2.3.1
+    restart: "no"
+    networks:
+      - localdev
+    depends_on:
+      - localstack
+    entrypoint: awslocal
+    command: >
+      cloudformation deploy
+      --endpoint-url http://localstack:4566
+      --no-fail-on-empty-changeset
+      --region us-east-1
+      --template-file /etc/aws.yml
+      --stack-name local-resources
+    volumes:
+      - ./conf/aws.yml:/etc/aws.yml
+
+  prometheus:
+    image: prom/prometheus:v2.45.1
+    volumes:
+      - ./conf/prometheus.yml:/etc/prometheus/prometheus.yml
+    command: >
+      --config.file=/etc/prometheus/prometheus.yml
+      --storage.tsdb.path=/prometheus
+      --web.console.libraries=/usr/share/prometheus/console_libraries
+      --web.console.templates=/usr/share/prometheus/consoles
+    ports:
+      - 9090:9090
+    networks:
+      - localdev
+
+  grafana:
+    image: grafana/grafana:9.5.12
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    volumes:
+      - ./conf/grafana:/etc/grafana/provisioning
+    ports:
+      - "3000:3000"
+    networks:
+      - localdev
+    depends_on:
+      - prometheus
+
+  otel:
+    image: otel/opentelemetry-collector-contrib:0.87.0
+    command: >
+      --config=/etc/collector.yml
+    environment:
+      - AWS_DEFAULT_REGION=us-east-1
+      - AWS_ACCESS_KEY_ID=deltalake
+      - AWS_SECRET_ACCESS_KEY=weloverust
+    volumes:
+      - ./conf/otel.yml:/etc/collector.yml
+    ports:
+      - "8888:8888"
+      - "8889:8889"
+      - "8890:8890"
+      - "4317:4317"
+      - "4318:4318"
+    networks:
+      - localdev
+
+  collector:
+    image: mathiaha/exchange-collector:latest
+    restart: unless-stopped
+    command: >
+      run
+      --config /etc/exchange.yml
+    environment:
+      - AWS_DEFAULT_REGION=us-east-1
+      - AWS_ACCESS_KEY_ID=deltalake
+      - AWS_SECRET_ACCESS_KEY=weloverust
+      - AWS_ALLOW_HTTP=true
+    volumes:
+      - ./conf/exchange.yml:/etc/exchange.yml
+    networks:
+      - localdev
+    depends_on:
+      - deploy-aws-resources
