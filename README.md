@@ -1,7 +1,7 @@
 # Exchange collector
 
-![build](https://github.com/mathiaHT/exchange-collector/actions/workflows/rust/badge.svg)
-![docker](https://github.com/mathiaHT/exchange-collector/actions/workflows/docker/badge.svg)
+![build](https://github.com/mathiaHT/exchange-collector/actions/workflows/rust.yml/badge.svg)
+![docker](https://github.com/mathiaHT/exchange-collector/actions/workflows/docker.yml/badge.svg)
 
 A crypto exchange collector written in rust to
 
