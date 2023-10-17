@@ -34,6 +34,10 @@ RUN cargo build --release
 # hadolint ignore=DL3006
 FROM gcr.io/distroless/cc-debian12
 
+LABEL org.opencontainers.image.source=https://github.com/mathiaHT/exchange-collector
+LABEL org.opencontainers.image.description="Exchange collector image"
+LABEL org.opencontainers.image.licenses=Apache-2.0
+
 # Import from builder.
 COPY --from=builder /etc/passwd /etc/passwd
 COPY --from=builder /etc/group /etc/group

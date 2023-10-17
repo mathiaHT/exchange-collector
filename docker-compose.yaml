@@ -1,7 +1,5 @@
 version: "3.8"
 
-name: localdev
-
 networks:
   localdev:
     name: localdev
